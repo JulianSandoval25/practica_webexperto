@@ -1,0 +1,5 @@
+<div>
+   <%= f.label :student_id, t('.student_id') %>
+   <%= f.collection_select :student_id, Student.all, :id, :nombre, { prompt: 'Selecciona Estudiante' }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= f.hidden_field :_destroy %>
+</div>
