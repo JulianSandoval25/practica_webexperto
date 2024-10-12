@@ -23,7 +23,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_172457) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "material_id", null: false
-    t.index ["material_id"], name: "index_courses_on_material_id"
+    t.index ["material_id"], name: "index_courses_on_material_id", unique: true
     t.index ["teacher_id"], name: "index_courses_on_teacher_id"
   end
 

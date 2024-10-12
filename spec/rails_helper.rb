@@ -9,7 +9,7 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 # return unless Rails.env.test?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
-Soulda::Matchers.configure do |config|
+Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
     with.library :rails
@@ -41,7 +41,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
-    DatabaseClearner.clean_with(:truncation)
+    DatabaseCleaner.clean_with(:truncation)
   end
   config.around(:each) do |example|
     DatabaseCleaner.cleaning do

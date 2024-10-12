@@ -39,26 +39,36 @@
     <%= form.label :teacher_id, t('.teacher_id') %>
     <%= form.collection_select :teacher_id, Teacher.all, :id, :nombre, { prompt: 'Selecciona profesor' }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
   </div>
+  <!--<div class="my-5">
+
+    <%#= form.label :material_id, t('.material_id') %>
+    <%#= form.collection_select :material_id, Material.all, :id, :nombre, { prompt: 'Selecciona Material' }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+
+  </div>-->
   <div class="my-5">
-    <%= form.label :material_id, t('.material_id') %>
-    <%= form.collection_select :material_id, Material.all, :id, :nombre, { prompt: 'Selecciona Material' }, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.fields_for :material do |material_form| %>
+      <%= material_form.label :nombre, "Nombre del Material" %>
+      <%= material_form.text_field :nombre, class: "block shadow rounded-md border border-gray-400 outline-none px-3 py-2 mt-2 w-full" %>
+    <% end %>
   </div>
+
+<!--
   <div data-controller="nested-form">
     <button type="button" id="addInscriptionButton", data-action="nested-form#add">Agregar Inscriptos</button>
     <div class="inscriptions" data-nested-form-target="container">
       <div class="my-5">
-        <%= form.fields_for :inscriptions do |g| %>
-          <%= render 'inscriptions_student', f:g %>
-        <% end %>
+        <%#= form.fields_for :inscriptions do |g| %>
+          <%#= render 'inscriptions_student', f:g %>
+        <%# end %>
       </div>
     </div>
     <template data-nested-form-target="template">
-      <%= form.fields_for :inscriptions, course.inscriptions.build, child_index: "NEW_RECORD" do |g| %>
-        <%= render 'inscriptions_student', f:g %>
-      <% end %>
+      <%#= form.fields_for :inscriptions, course.inscriptions.build, child_index: "NEW_RECORD" do |g| %>
+        <%#= render 'inscriptions_student', f:g %>
+      <%# end %>
     </template>
 
-  </div>
+  </div>-->
 
 
   <div class="inline">

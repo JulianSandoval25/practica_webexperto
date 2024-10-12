@@ -14,6 +14,23 @@
 #
 require 'rails_helper'
 
+
 RSpec.describe Course, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "validations" do
+    it "validate presence of required fields" do
+      should validate_presence_of(:nombre)
+      should validate_presence_of(:descripcion)
+      should validate_presence_of(:fecha_inicio)
+      should validate_presence_of(:costo)
+      should validate_presence_of(:teacher_id)
+      should validate_presence_of(:material_id)
+
+    end
+
+    it "validates that fecha_inicio is not in the past" do
+      course = Course.new(fecha_inicio: Date.yesterday)
+      course.valid?
+      expect(course.errors[:fecha_inicio]).to include("debe ser mayor a la fecha actual")
+    end
+  end
 end

@@ -15,13 +15,12 @@
 class Course < ApplicationRecord
   belongs_to :teacher
   belongs_to :material
-  has_many :inscriptions
-  has_many :students, through: :inscriptions
-  validates :nombre, :descripcion, :fecha_inicio, :costo, :teacher_id, :material_id, presence: true
+  validates :nombre, :descripcion, :fecha_inicio, :costo, :teacher_id, presence: true
+  #validates :material_id, uniqueness: true
   validate :due_date_validity
-  accepts_nested_attributes_for :inscriptions, allow_destroy: true
+  accepts_nested_attributes_for :material
   def due_date_validity
-    if fecha_inicio < Date.today
+    if fecha_inicio.present? && fecha_inicio < Date.today
       errors.add(:fecha_inicio, "debe ser mayor a la fecha actual")
     end
   end

@@ -13,119 +13,66 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/students", type: :request do
-  
-  # This should return the minimal set of attributes required to create a valid
-  # Student. As you add validations to Student, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
 
   describe "GET /index" do
+
     it "renders a successful response" do
-      Student.create! valid_attributes
       get students_url
       expect(response).to be_successful
     end
   end
+  describe "GET /students/{id}" do
+    let!(:estudiante) { create(:student) }
 
-  describe "GET /show" do
-    it "renders a successful response" do
-      student = Student.create! valid_attributes
-      get student_url(student)
-      expect(response).to be_successful
+    it "should return a students" do
+      get "/students/#{estudiante.id}.json"
+      payload = JSON.parse(response.body)
+      expect(payload).to_not be_empty
+      expect(payload["id"]).to eq(estudiante.id)
+      expect(response).to have_http_status(200)
     end
   end
 
-  describe "GET /new" do
-    it "renders a successful response" do
-      get new_student_url
-      expect(response).to be_successful
+  describe "with data in the DB" do
+    let!(:estudiantes) { create_list(:student,10) }
+    it "should return all the students" do
+      get "/students.json"
+      payload = JSON.parse(response.body)
+      expect(payload.size).to eq(estudiantes.size)
+      expect(response).to have_http_status(200)
     end
   end
 
-  describe "GET /edit" do
-    it "renders a successful response" do
-      student = Student.create! valid_attributes
-      get edit_student_url(student)
-      expect(response).to be_successful
-    end
-  end
+  describe "POST /students" do
 
-  describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new Student" do
-        expect {
-          post students_url, params: { student: valid_attributes }
-        }.to change(Student, :count).by(1)
-      end
-
-      it "redirects to the created student" do
-        post students_url, params: { student: valid_attributes }
-        expect(response).to redirect_to(student_url(Student.last))
-      end
-    end
-
-    context "with invalid parameters" do
-      it "does not create a new Student" do
-        expect {
-          post students_url, params: { student: invalid_attributes }
-        }.to change(Student, :count).by(0)
-      end
-
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post students_url, params: { student: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
-  end
-
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+    it "creates a new Student" do
+      req_payload ={
+        student: {
+          nombre: "Juan",
+          apellido: "Perez",
+          email: "juanperez@mail.com"
+        }
       }
-
-      it "updates the requested student" do
-        student = Student.create! valid_attributes
-        patch student_url(student), params: { student: new_attributes }
-        student.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "redirects to the student" do
-        student = Student.create! valid_attributes
-        patch student_url(student), params: { student: new_attributes }
-        student.reload
-        expect(response).to redirect_to(student_url(student))
-      end
+      post "/students.json", params: req_payload
+      payload = JSON.parse(response.body)
+      expect(payload).to_not be_empty
+      expect(payload["id"]).to_not be_nil
+      expect(response).to have_http_status(:created)
     end
 
-    context "with invalid parameters" do
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        student = Student.create! valid_attributes
-        patch student_url(student), params: { student: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
+    it "should return error message on invalid student" do
+      req_payload ={
+        student: {
+          email: "juanperez@mail.com"
+        }
+      }
+      post "/students.json", params: req_payload
+      payload = JSON.parse(response.body)
+      expect(payload["nombre"]).to include("can't be blank")
+      expect(payload["apellido"]).to include("can't be blank")
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
-  describe "DELETE /destroy" do
-    it "destroys the requested student" do
-      student = Student.create! valid_attributes
-      expect {
-        delete student_url(student)
-      }.to change(Student, :count).by(-1)
-    end
-
-    it "redirects to the students list" do
-      student = Student.create! valid_attributes
-      delete student_url(student)
-      expect(response).to redirect_to(students_url)
-    end
-  end
 end

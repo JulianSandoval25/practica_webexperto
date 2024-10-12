@@ -13,6 +13,7 @@ class CoursesController < ApplicationController
   # GET /courses/new
   def new
     @course = Course.new
+    @course.build_material
   end
 
   # GET /courses/1/edit
@@ -22,16 +23,9 @@ class CoursesController < ApplicationController
   # POST /courses or /courses.json
   def create
     @course = Course.new(course_params)
-    #duda, sino no me deja crear el course debido a que inscription esta en blanco
-    @course.inscriptions.each do |inscription|
-      inscription.course_id = 1
-    end
+
     respond_to do |format|
       if @course.save
-        @course.inscriptions.each do |inscription|
-          inscription.course_id = @course.id
-          inscription.save
-        end
         format.html { redirect_to @course, notice: "Course was successfully created." }
         format.json { render :show, status: :created, location: @course }
       else
@@ -79,10 +73,15 @@ class CoursesController < ApplicationController
         :costo,
         :teacher_id,
         :material_id,
+        material_attributes: [
+          :nombre
+        ]
+=begin
         inscriptions_attributes: [
           :student_id,
           :_destroy
         ]
+=end
       )
     end
 end
