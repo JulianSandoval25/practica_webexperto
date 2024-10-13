@@ -55,6 +55,8 @@ class TeachersController < ApplicationController
       format.html { redirect_to teachers_path, status: :see_other, notice: "Teacher was successfully destroyed." }
       format.json { head :no_content }
     end
+  rescue ActiveRecord::InvalidForeignKey
+    redirect_to error_teachers_url, alert: 'No se puede eliminar un profesor con cursos asociados.'
   end
 
   private

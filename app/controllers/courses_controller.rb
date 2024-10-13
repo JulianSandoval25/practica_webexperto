@@ -27,7 +27,7 @@ class CoursesController < ApplicationController
     @course = Course.new(course_params)
     if params[:student_ids]
       students = @students.find(params[:student_ids])
-      course.students << students
+      @course.students << students
     end
     respond_to do |format|
       if @course.save
