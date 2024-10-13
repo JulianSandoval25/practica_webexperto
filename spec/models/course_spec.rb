@@ -23,8 +23,7 @@ RSpec.describe Course, type: :model do
       should validate_presence_of(:fecha_inicio)
       should validate_presence_of(:costo)
       should validate_presence_of(:teacher_id)
-      should validate_presence_of(:material_id)
-
+      should accept_nested_attributes_for(:material)
     end
 
     it "validates that fecha_inicio is not in the past" do

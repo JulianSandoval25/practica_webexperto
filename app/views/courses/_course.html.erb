@@ -21,7 +21,8 @@
 
   <p class="my-5">
     <strong class="block font-medium mb-1">Teacher:</strong>
-    <%= course.teacher_id %>
+    <p>Id: <%= course.teacher_id %></p>
+    <p>Nombre y apellido: <%= course.teacher.nombre %> <%= course.teacher.apellido %></p>
   </p>
 
 </div>
