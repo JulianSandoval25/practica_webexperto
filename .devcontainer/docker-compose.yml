@@ -1,0 +1,29 @@
+services:
+  rails:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    tty: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../:/workspace
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sa123456
+    working_dir: /workspace
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sa123456
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:

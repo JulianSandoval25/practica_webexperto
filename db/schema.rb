@@ -27,21 +27,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_172457) do
     t.index ["teacher_id"], name: "index_courses_on_teacher_id"
   end
 
-  create_table "inscriptions", force: :cascade do |t|
-    t.bigint "student_id", null: false
+  create_table "courses_students", id: false, force: :cascade do |t|
     t.bigint "course_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_id"], name: "index_inscriptions_on_course_id"
-    t.index ["student_id"], name: "index_inscriptions_on_student_id"
+    t.bigint "student_id", null: false
   end
 
   create_table "materials", force: :cascade do |t|
     t.string "nombre"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "course_id"
-    t.index ["course_id"], name: "index_materials_on_course_id"
   end
 
   create_table "students", force: :cascade do |t|
@@ -62,7 +56,4 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_08_172457) do
 
   add_foreign_key "courses", "materials"
   add_foreign_key "courses", "teachers"
-  add_foreign_key "inscriptions", "courses"
-  add_foreign_key "inscriptions", "students"
-  add_foreign_key "materials", "courses"
 end

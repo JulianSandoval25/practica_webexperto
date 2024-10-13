@@ -13,19 +13,25 @@ class CoursesController < ApplicationController
   # GET /courses/new
   def new
     @course = Course.new
+    @students = Student.all
     @course.build_material
   end
 
   # GET /courses/1/edit
   def edit
+    @students = Student.all
   end
 
   # POST /courses or /courses.json
   def create
     @course = Course.new(course_params)
-
+    if params[:student_ids]
+      students = @students.find(params[:student_ids])
+      course.students << students
+    end
     respond_to do |format|
       if @course.save
+
         format.html { redirect_to @course, notice: "Course was successfully created." }
         format.json { render :show, status: :created, location: @course }
       else
@@ -74,14 +80,10 @@ class CoursesController < ApplicationController
         :teacher_id,
         :material_id,
         material_attributes: [
-          :nombre
-        ]
-=begin
-        inscriptions_attributes: [
-          :student_id,
+          :nombre,
           :_destroy
-        ]
-=end
+        ],
+        student_ids: []
       )
     end
 end

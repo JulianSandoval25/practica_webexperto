@@ -15,6 +15,7 @@
 class Course < ApplicationRecord
   belongs_to :teacher
   belongs_to :material
+  has_and_belongs_to_many :students
   validates :nombre, :descripcion, :fecha_inicio, :costo, :teacher_id, presence: true
   #validates :material_id, uniqueness: true
   validate :due_date_validity
