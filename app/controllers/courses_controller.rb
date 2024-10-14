@@ -25,6 +25,7 @@ class CoursesController < ApplicationController
   # POST /courses or /courses.json
   def create
     @course = Course.new(course_params)
+    @students = Student.all
     if params[:student_ids]
       students = @students.find(params[:student_ids])
       @course.students << students
